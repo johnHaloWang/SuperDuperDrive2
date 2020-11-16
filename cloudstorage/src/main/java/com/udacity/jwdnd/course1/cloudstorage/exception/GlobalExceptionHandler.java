@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
@@ -25,31 +26,13 @@ public class GlobalExceptionHandler {
 
     public final static String TAG_ = "GlobalExceptionHandler ";
 
-    @ExceptionHandler(MultipartException.class)
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleError1(HttpServletRequest req, MultipartException e, RedirectAttributes redirectAttributes, Model model) throws Exception {
         log.debug(TAG_ + "-> inside the GlobalExceptionHandler ");
 
-        String errorMsgStr = "file size limit exceeded!";
-        model.addAttribute("errorResultMessage", errorMsgStr);
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", e);
-        mav.addObject("url", "result");
-        redirectAttributes.addFlashAttribute("message", e.getCause().getMessage());
-        return "redirect:/file/error";
-
-
+        String errorMsgStr = "Error: Maximum upload size exceeded!";//
+        model.addAttribute("pageTitle", errorMsgStr);
+        model.addAttribute("errorMsg", e);
+        return "error";
     }
-
-    //CommonsMultipartResolver
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ModelAndView handleMaxSizeException(
-            MaxUploadSizeExceededException exc,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        log.debug(TAG_ + "-> inside the GlobalExceptionHandler 2 ");
-        ModelAndView modelAndView = new ModelAndView("/result");
-        modelAndView.getModel().put("message", "File too large!");
-        return modelAndView;
-    }
-
 }

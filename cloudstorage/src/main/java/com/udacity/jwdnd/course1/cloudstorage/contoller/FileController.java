@@ -49,7 +49,7 @@ public class FileController implements HandlerExceptionResolver {
                 int addRow = 1;
                 try {
                     addRow = this.fileService.addFile(fileForm.getFileEntity(), userId);
-                } catch (Exception e) {
+                }catch (Exception e) {
                     addRow = -1;
                 }
                 if (addRow != 1) {
@@ -57,6 +57,7 @@ public class FileController implements HandlerExceptionResolver {
                     model.addAttribute("errorResult", true);
                     errorMsgStr = "New file failed to add";
                     model.addAttribute("errorResultMessage", errorMsgStr);
+
                 } else {
                     log.debug(TAG_ + "-> add new file success");
                     model.addAttribute("successResult", true);
